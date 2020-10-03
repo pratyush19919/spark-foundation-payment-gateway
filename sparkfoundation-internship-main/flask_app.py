@@ -1,12 +1,13 @@
+#impoet dependencies
 import json
 import razorpay
 from flask import Flask,render_template,request,jsonify,redirect,url_for,make_response
 from flask_sqlalchemy import SQLAlchemy
 import smtplib
 from datetime import datetime
-
+#flask object
 app = Flask(__name__)
-
+#MySQL database
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username="saiPratyush",
     password="Bhavana@123",
@@ -27,7 +28,7 @@ class User(db.Model):
     email = db.Column(db.String(120),nullable=False)
     name = db.Column(db.String(120),nullable=False)
     amount = db.Column(db.String(120),nullable=False)
-
+#main_page
 @app.route('/',methods=["GET",'POST'])
 def hello():
     if request.method == "POST":
@@ -42,7 +43,7 @@ def hello():
         return redirect(url_for("pay", id = user.id))
 
     return render_template("index.html")
-
+#payment_page
 
 @app.route('/pay/<id>',methods=["GET","POST"])
 def pay(id):
@@ -53,21 +54,14 @@ def pay(id):
         return redirect(url_for("success", id = user.id))
     print(payment)
     return render_template("pay.html",payment = payment,user_id=user.id)
-
+#Success page
 @app.route('/success/<id>',methods=["GET","POST"])
 def success(id):
     user = User.query.filter_by(id=id).first()
-
-
-
-    mail(user.name,user.email,user.amount)
-
-
-
-
+    mail(user.name,user.email,user.amount)#email function
     return render_template("success.html")
 
-def mail(name,email,amount):
+def mail(name,email,amount):   #function to send email
     with smtplib.SMTP("smtp.gmail.com",587) as smtp:
         smtp.ehlo()
         smtp.starttls()
