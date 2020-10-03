@@ -1,7 +1,7 @@
 #impoet dependencies
-import json
+
 import razorpay
-from flask import Flask,render_template,request,jsonify,redirect,url_for,make_response
+from flask import Flask,render_template,request,redirect,url_for,make_response
 from flask_sqlalchemy import SQLAlchemy
 import smtplib
 from datetime import datetime
